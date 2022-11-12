@@ -6,7 +6,7 @@ const url = require("url");
 
 var upload = multer({ dest: "resources/userImage/" });
 var app = express();
-app.set("port", process.env.PORT || 5000);
+app.set("port", process.env.PORT || 3000);
 var bodyParser = require("body-parser");
 app.use(bodyParser.json()); // to support JSON-encoded bodies
 app.use(
@@ -52,23 +52,21 @@ const userSchema = new mongoose.Schema({
 });
 
 const patientSchema = new mongoose.Schema({
-  patientUserName: String,
-  firstName: String,
-  lastName: String,
+  first_name: String,
+  last_name: String,
   address: String,
-  dateOfBirth: String,
-  doctorName: String,
-  doctorID: String,
+  date_of_birth: String,
+  department: String,
+  doctor: String,
   sex: String,
-  phoneNumber: String,
-  emailAddress: String,
-  emergencyContact: String,
-  emergencyContactPhoneNumber: String,
-  bedNumber: String,
-  imageUri: String,
-  imageType: String,
-  imageName: String,
-});
+  phone_number: String,
+  emergency_contact_first_name: String,
+  emergency_contact_last_name: String,
+  emergency_contact_phone_number: String,
+  date_of_admission: String,
+  bed_number: String,
+  photo: String,
+})
 
 const appointmentSchema = new mongoose.Schema({
   patientName: String,
@@ -177,28 +175,27 @@ app.post("/patients", function (req, res) {
   console.log("POST request: login params=>" + JSON.stringify(req.params));
   console.log("POST request: login body=>" + JSON.stringify(req.body));
   // Make sure name is defined
-  if (req.body.patientUserName === undefined) {
+  if (req.body.first_name === undefined) {
     // If there are any errors, pass them to next in the correct format
-    throw new Error("username cannot be empty");
+    throw new Error("first name cannot be empty");
   }
 
   // Creating new user.
   var newPatient = new Patient({
-    patientUserName: req.body.patientUserName,
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
+    first_name: req.body.first_name,
+    last_name: req.body.last_name,
     address: req.body.address,
-    dateOfBirth: req.body.dateOfBirth,
-    doctorName: req.body.doctorName,
-    doctorID: req.body.doctorID,
+    date_of_birth: req.body.date_of_birth,
+    department: req.body.department,
+    doctor: req.body.doctor,
     sex: req.body.sex,
-    phoneNumber: req.body.phoneNumber,
-    emailAddress: req.body.emailAddress,
-    emergencyContact: req.body.emergencyContact,
-    emergencyContactPhoneNumber: req.body.emergencyContactPhoneNumber,
-    bedNumber: req.body.bedNumber,
-    imageType: req.body.imageType,
-    imageName: req.body.imageName,
+    phone_number: req.body.phone_number,
+    emergency_contact_first_name: req.body.emergency_contact_first_name,
+    emergency_contact_last_name: req.body.emergency_contact_last_name,
+    emergency_contact_phone_number: req.body.emergency_contact_phone_number,
+    date_of_admission: req.body.date_of_admission,
+    bed_number: req.body.bed_number,
+    photo: req.body.photo,
   });
   // Create the new user and saving to db
   newPatient.save(function (error, result) {
